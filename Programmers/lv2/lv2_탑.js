@@ -1,6 +1,11 @@
-function testMap(arr) {
-  let result = arr.map((v, i) => {
-    console.log(v);
-    console.log(i + "바퀴 종료");
+function solution(arr) {
+  return arr.map((v, i) => {
+    while (i) {
+      i--;
+      if (arr[i] > v) {
+        return i + 1;
+      }
+    }
+    return 0;
   });
 }
