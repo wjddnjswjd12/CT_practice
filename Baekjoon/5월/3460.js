@@ -1,19 +1,19 @@
-// const readline = require("readline");
+const readline = require("readline");
 
-// const r1 = readline.createInterface({
-//   input: process.stdin,
-//   output: process.stdout,
-// });
+const r1 = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout,
+});
 
-// let input = [];
-// r1.on("line", function (line) {
-//   input.push(line);
-// }).on("close", function () {
-//   const N = input.shift();
-//   for (let i = 0; i < N; i++) console.log(answer(Number(input.shift())));
+let input = [];
+r1.on("line", function (line) {
+  input.push(line);
+}).on("close", function () {
+  const N = input.shift();
+  for (let i = 0; i < N; i++) console.log(answer(Number(input.shift())));
 
-//   process.exit();
-// });
+  process.exit();
+});
 
 function answer(num) {
   let temp = num.toString(2);
