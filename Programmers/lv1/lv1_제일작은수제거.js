@@ -16,3 +16,11 @@ function solution(arr) {
     return arr;
   }
 }
+
+function solution2(arr) {
+  let temp = [...arr].sort((a, b) => b - a);
+  const index = arr.indexOf(temp.pop());
+  arr.splice(index, 1);
+  if (!arr.length) return [-1];
+  else return arr;
+}
