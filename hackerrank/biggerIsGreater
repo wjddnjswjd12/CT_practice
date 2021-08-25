@@ -1,0 +1,28 @@
+function biggerIsGreater(w) {
+    let largest = -1;
+    
+    for(let i = 0; i < w.length - 1; i++){
+        if(w[i] < w[i + 1]) largest = i;
+    }
+    
+    if(largest === -1) return 'no answer';
+    
+    let largest2 = -1
+    
+    for(let j=largest+1; j<w.length; j++){
+        if (w[j]>w[largest]){
+            largest2 = j;
+        }
+    }
+    
+    let arr = w.split('');
+    let temp = arr[largest];
+    arr[largest] = arr[largest2];
+    arr[largest2] = temp;
+    
+    let left=arr.slice(0,largest+1);
+    let right=arr.slice(largest+1);
+    
+    return left.concat(right.reverse()).join('');
+    
+}
