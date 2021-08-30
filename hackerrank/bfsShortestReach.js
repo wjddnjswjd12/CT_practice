@@ -1,8 +1,6 @@
-
 function bfs(n, m, edges, s) {
     // Write your code here
-    
-    let graph={};
+  let graph={};
     let visited = {};
     let reachDistance = {};
     
@@ -12,7 +10,7 @@ function bfs(n, m, edges, s) {
 
     for(let [start, end] of edges){
         graph[start].push(end);
-        graph[end].push[start];
+        graph[end].push(start); //와..진짜..이거..하나때문에.....ㅋㅋ
     }
     
     const queue = [[s, 0]];
