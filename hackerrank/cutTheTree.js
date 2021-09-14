@@ -1,65 +1,78 @@
+const dfs = (root, visited, minDiffObj, total) => {
+  visited.add(root);
 
-/*
-
-
-2시간 고민하다가 도저히 모르겠어서 + 답지도 없어서 내일 다시 고민해보기
-
-
-*/
+  let thisSum = root.data;
+  root.connects.forEach((node) => {
+    if (!visited.has(node)) {
+      let childSum = dfs(node, visited, minDiffObj, total);
+      minDiffObj.val = Math.min(
+        Math.abs(total - childSum - childSum),
+        minDiffObj.val
+      );
+      thisSum += childSum;
+    }
+  });
+  return thisSum;
+};
 
 function cutTheTree(data, edges) {
-    // Write your code here
-    
-    const visited = {};
-    
-    const graphList = [];
-    let scope = 1;
-    
-    for (let i=0; i<edges.length; i++){
-        const slicedArray = edges.slice(i+1,edges.length)
-        graphList.push(generateGraph(slicedArray, edges.length))
+  let map = new Map();
+  let total = 0;
+
+  for (let i = 1; i <= data.length; i++) {
+    let node = getNode(map, i);
+    node.data = data[i - 1];
+    total += data[i - 1];
+  }
+
+  for (let i = 0; i < edges.length; i++) {
+    let start = getNode(map, edges[i][0]);
+    let target = getNode(map, edges[i][1]);
+    start.connects.add(target);
+    target.connects.add(start);
+  }
+
+  let root = getNode(map, 1);
+
+  let stack = [root];
+
+  let minDiff = Number.MAX_SAFE_INTEGER;
+
+  while (stack.length > 0) {
+    let node = stack.pop();
+    if (!node.visited) {
+      let children = Array.from(node.connects.values()).filter((n) => {
+        return !n.visited;
+      });
+      node.visited = true;
+      stack.push(node);
+      children.forEach((c) => {
+        stack.push(c);
+      });
+    } else if (stack.length > 0) {
+      minDiff = Math.min(Math.abs(total - node.data - node.data), minDiff);
+      let i = stack.length - 1;
+      while (i > 0 && !stack[i].visited) {
+        i--;
+      }
+      if (!stack[i]) {
+        console.log("stack", stack, "i", i);
+      }
+      stack[i].data += node.data;
     }
-       
-    const dfs = (graph, node, visited, scope) => {
-        visited[scope].push(node);
-        
-        Object.values(graph).forEach((node)=>{
-            if(!visited[scope].includes(node)){
-                dfs(graph, node, visited, scope);
-            }
-        });
+  }
+  return minDiff;
+}
+
+const getNode = (map, label) => {
+  if (map.has(label)) {
+    return map.get(label);
+  } else {
+    let node = {
+      label: label,
+      connects: new Set(),
     };
-    
-
-
-    for(let i = 0; i<graphList.length; i++){
-     
-        visited[i+1] = new Array();
-        
-        if(!visited[i+1].includes(i+1)){ 
-            console.log(visited[i+1].includes(i+1),visited, i+1)
-            dfs(graphList[i], i+1, visited, scope);
-            scope++;
-        }
-       
-    }
-  
-    
-}
-
-   
-   
-
-
-function generateGraph(edges, originalLength){
-    const graph = {};
-    
-    for(let i = 0; i< originalLength + 1; i++){
-        graph[i+1]=new Array();
-    }
-    for(const [start, end] of edges){
-        graph[start].push(end);
-        graph[end].push(start); 
-    }
-    return graph;
-}
+    map.set(label, node);
+    return node;
+  }
+};
